@@ -26,7 +26,7 @@ public interface List
 
 	//we can set value by index between [0, size -1]
 	// otherwise throw new  IndexOutOfBoundsException
-	Object set(Object vvalue, int index);
+	Object set(Object value, int index);
 
 
 	void clear();

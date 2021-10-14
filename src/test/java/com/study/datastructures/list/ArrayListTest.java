@@ -1,11 +1,30 @@
 package com.study.datastructures.list;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 
 public class ArrayListTest
 {
+	private List listOfZeroElements = new ArrayList();
+	private List listOfSevenElements = new ArrayList(7);
+
+	@Before
+	public void before()
+	{
+		for (int i = 0; i < 7; i++)
+		{
+			listOfSevenElements.add(i);
+		}
+	}
+
+	@Test
+	public void sizeTest()
+	{
+		Assert.assertEquals(listOfZeroElements.size(), 0);
+		Assert.assertEquals(listOfSevenElements.size(), 7);
+	}
 
 	@Test
 	public void add()
