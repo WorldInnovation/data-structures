@@ -43,7 +43,6 @@ public class HashMap implements Map
 			return buckets[bucketKey];
 		}
 
-		//currentEntry.next = entry;
 		buckets[bucketKey].next = entry;
 		size++;
 		return entry;
@@ -79,7 +78,80 @@ public class HashMap implements Map
 	@Override
 	public Object remove(Object key)
 	{
-		return null;
+		int bucketKey = countHash(key);
+		if (!containsKey(key))
+		{
+			return null;
+		}
+
+		Entry currentEntry = null;
+
+		if (buckets[bucketKey].next != null)
+		{
+			if (buckets[bucketKey].key.equals(key)) //tail element
+			{
+				return deleteEntry(currentEntry, bucketKey);
+			}
+			while (buckets[bucketKey].next != null)
+			{
+				if (buckets[bucketKey].key.equals(key))
+				{
+					return deleteEntry(currentEntry, bucketKey);
+				}
+				if (currentEntry == null )
+				{
+					currentEntry = new Entry(buckets[bucketKey].key, buckets[bucketKey].value, null);
+				}
+				else
+				{
+					currentEntry.next =  buckets[bucketKey];
+				}
+
+				buckets[bucketKey] = buckets[bucketKey].next;
+			}
+			if (buckets[bucketKey].key.equals(key)) //tail element
+			{
+				return deleteEntry(currentEntry, bucketKey);
+			}
+		}
+		else   //contains one element
+		{
+			decrementSize();
+			buckets[bucketKey] = null;
+		}
+
+		return currentEntry;
+	}
+
+	private Entry deleteEntry(Entry currentEntry, int bucketKey)
+	{
+		Entry deleteEntry = buckets[bucketKey];
+		if (currentEntry == null)                  // erase tail elem and the new one is next one
+		{
+			buckets[bucketKey] = buckets[bucketKey].next;
+		}
+		else                                       // erase if deleted >= tail.next
+		{
+			if (buckets[bucketKey].next != null)   //has elem after deleted?
+			{
+				currentEntry.next = buckets[bucketKey].next;
+			}
+			else
+			{
+				currentEntry.next = null;
+			}
+			buckets[bucketKey] = currentEntry;
+		}
+		decrementSize();
+		return deleteEntry;
+	}
+
+	private void decrementSize()
+	{
+		if (size > 0)
+		{
+			size--;
+		}
 	}
 
 	private int countHash(Object key)
@@ -90,24 +162,27 @@ public class HashMap implements Map
 
 	private Entry getEntry(int bucketKey, Object key)
 	{
-		if (buckets[bucketKey] != null)
+		if (buckets[bucketKey] == null)
 		{
-			return buckets[bucketKey];
+			return null;
 		}
-		while (buckets[bucketKey].next != null)
-		{
-			if (buckets[bucketKey].key.equals(key))
-			{
-				return buckets[bucketKey];
-			}
 
-			buckets[bucketKey] = buckets[bucketKey].next;
-		}
-		if (buckets[bucketKey].key.equals(key))
+		Entry currentEntry = buckets[bucketKey];      //iterate on this entry
+		if (buckets[bucketKey].next != null) //has next of chain elements
 		{
-			return buckets[bucketKey];
+
+			while (currentEntry.next != null)
+			{
+				if (currentEntry.key.equals(key))
+				{
+					return currentEntry;
+				}
+
+				currentEntry = currentEntry.next;
+			}
 		}
-		return null;
+		return (currentEntry.key.equals(key)) ? currentEntry : null;
+
 	}
 
 

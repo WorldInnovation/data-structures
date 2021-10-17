@@ -2,7 +2,7 @@ package com.study.datastructures.map;
 
 public class Entry
 {
-	final Object key;
+	Object key;
 	Object value;
 	Entry next;
 
