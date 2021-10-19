@@ -2,9 +2,17 @@ package com.study.datastructures.map;
 
 
 
+import com.study.datastructures.list.LinkedList;
+
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
+
 public class HashMap implements Map
 {
 	private final static int ARRAY_SIZE = 5;
+	private static final String MESSAGE_NO_SUCH_ELEMENTS_IN_ITERATOR = "No any elements in next for iterator";
+	private static final String MESSAGE_METHOD_NEXT_HAS_NOT_BEEN_COLLEN = "Method next has not been collen";
 	private Entry[] buckets;
 	private int size;
 
@@ -98,13 +106,14 @@ public class HashMap implements Map
 				{
 					return deleteEntry(currentEntry, bucketKey);
 				}
-				if (currentEntry == null )
+				if (currentEntry == null)
 				{
 					currentEntry = new Entry(buckets[bucketKey].key, buckets[bucketKey].value, null);
 				}
 				else
 				{
-					currentEntry.next =  buckets[bucketKey];
+					currentEntry.next = buckets[bucketKey];
+					currentEntry = currentEntry.next;
 				}
 
 				buckets[bucketKey] = buckets[bucketKey].next;
@@ -185,7 +194,21 @@ public class HashMap implements Map
 
 	}
 
+		private class Entry
+		{
+			Object key;
+			Object value;
+			Entry next;
+
+			public Entry(Object key, Object value, Entry next)
+			{
+				this.key = key;
+				this.value = value;
+				this.next = next;
+			}
+		}
 
 
 
-}
+
+	}

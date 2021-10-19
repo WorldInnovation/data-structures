@@ -1,12 +1,16 @@
 package com.study.datastructures.list;
 
 
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 
 public class LinkedList implements List
 {
 	private static final String MESSAGE_ARRAY_SIZE_NOT_IN_FIT = "The index should be smaller then size and not negative";
+	private static final String MESSAGE_NO_SUCH_ELEMENTS_IN_ITERATOR = "No any elements in next for iterator";
+	private static final String MESSAGE_METHOD_NEXT_HAS_NOT_BEEN_COLLEN = "Method next has not been collen";
 	private Node head;
 	private Node tail;
 	private int size;
@@ -153,6 +157,84 @@ public class LinkedList implements List
 	{
 		Node current = head;
 		return findNodeByValueFromHead(current, value);
+	}
+
+	public Iterator getIterator()
+	{
+		return new MyIterator();
+	}
+
+	private class MyIterator implements Iterator
+	{
+
+		private Node current = tail;
+		private boolean hasNextCalled;
+
+		@Override
+		public boolean hasNext()
+		{
+			return current.next != null ? true : false;
+		}
+
+		@Override
+		public Object next()
+		{
+			Object value;
+			if (hasNext())
+			{
+				current = current.next;
+				value = current.value;
+				hasNextCalled = true;
+			}
+			else
+			{
+				throw new NoSuchElementException(MESSAGE_NO_SUCH_ELEMENTS_IN_ITERATOR);
+			}
+
+			return value;
+		}
+
+		@Override
+		public void remove()
+		{
+			if (hasNextCalled)
+			{
+
+
+				if (current == head)
+				{
+					current = current.prev;
+					current.next = null;
+					head = current;
+				}
+				else
+				{
+					Node temp = current;
+					current = current.prev;
+					current.next = temp.next;
+					temp = current.next;
+					current.prev = temp.prev;
+				}
+				hasNextCalled = false;
+			}
+			else
+			{
+				throw new IllegalStateException(MESSAGE_METHOD_NEXT_HAS_NOT_BEEN_COLLEN);
+			}
+
+		}
+	}
+
+	private class Node
+	{
+		private Object value;
+		private Node next;
+		private Node prev;
+
+		public Node(Object value)
+		{
+			this.value = value;
+		}
 	}
 
 	private void addNewNodeOnHead(Node current, Node newNode)

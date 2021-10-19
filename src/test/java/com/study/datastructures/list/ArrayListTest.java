@@ -4,6 +4,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Iterator;
+
 
 public class ArrayListTest
 {
@@ -207,6 +209,58 @@ public class ArrayListTest
 		printString.add("a");
 
 		Assert.assertEquals(printString.toString(), "[J, 7, 3, a]");
+	}
+
+	@Test
+	public void iteratorTest()
+	{
+		List printString = new ArrayList();
+		printString.add("J");
+		printString.add("a");
+		printString.add("v");
+		printString.add("a");
+
+		Iterator iterator = ((ArrayList) printString).getIterator();
+		int i = 0;
+		while (iterator.hasNext())
+		{
+			iterator.next();
+			i++;
+		}
+
+		Assert.assertEquals(i, 3);
+
+	}
+
+	@Test(expected = IllegalStateException.class)
+	public void iteratorRemoveException()
+	{
+		List printString = new ArrayList();
+		printString.add(1);
+
+
+		Iterator iterator = ((ArrayList) printString).getIterator();
+		iterator.remove();
+	}
+
+	@Test
+	public void iteratorTestRemove()
+	{
+		List printString = new ArrayList();
+		printString.add("J");
+		printString.add("a");
+
+		Iterator iterator = ((ArrayList) printString).getIterator();
+		int i = 0;
+		while (iterator.hasNext())
+		{
+			iterator.next();
+			iterator.remove();
+			i++;
+		}
+
+		Assert.assertEquals(i, 1);
+
 	}
 
 

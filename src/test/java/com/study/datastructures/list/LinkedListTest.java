@@ -3,6 +3,8 @@ package com.study.datastructures.list;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Iterator;
+
 
 public class LinkedListTest
 {
@@ -162,5 +164,58 @@ public class LinkedListTest
 		testAdd.add(2);
 		Assert.assertEquals(testAdd.lastIndexOf(2), 2);
 	}
+
+	@Test
+	public void iteratorTest()
+	{
+		List printString = new LinkedList();
+		printString.add("J");
+		printString.add("a");
+		printString.add("v");
+		printString.add("a");
+
+		Iterator iterator = ((LinkedList) printString).getIterator();
+		int i = 0;
+		while (iterator.hasNext())
+		{
+			iterator.next();
+			i++;
+		}
+
+		Assert.assertEquals(i, 3);
+
+	}
+
+	@Test(expected = IllegalStateException.class)
+	public void iteratorRemoveException()
+	{
+		List printString = new LinkedList();
+		printString.add(1);
+
+
+		Iterator iterator = ((LinkedList) printString).getIterator();
+		iterator.remove();
+	}
+
+	@Test
+	public void iteratorTestRemove()
+	{
+		List printString = new LinkedList();
+		printString.add("J");
+		printString.add("a");
+
+		Iterator iterator = ((LinkedList) printString).getIterator();
+		int i = 0;
+		while (iterator.hasNext())
+		{
+			iterator.next();
+			iterator.remove();
+			i++;
+		}
+
+		Assert.assertEquals(i, 1);
+
+	}
+
 
 }

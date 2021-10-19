@@ -1,5 +1,7 @@
 package com.study.datastructures.list;
 
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.StringJoiner;
 
 
@@ -7,6 +9,10 @@ public class ArrayList implements List
 {
 	private static final int ARRAY_SIZE = 4;
 	private static final String MESSAGE_ARRAY_INDEX_NOT_IN_FIT = "The index should be smaller then size or not negative";
+	private static final String MESSAGE_NO_SUCH_ELEMENTS_IN_ITERATOR = "No any elements in next for iterator";
+	private static final String MESSAGE_METHOD_NEXT_HAS_NOT_BEEN_COLLEN = "Method next has not been collen";
+	private Node head;
+	private Node tail;
 	private Object[] array;
 	private int size;
 	private int currentCapacity;
@@ -156,6 +162,66 @@ public class ArrayList implements List
 		}
 
 		return "[" + stringJoiner + "]";
+	}
+
+	public Iterator getIterator()
+	{
+		return new MyIterator();
+	}
+
+
+	private class MyIterator implements Iterator
+	{
+
+		private int index;
+		private boolean hasNextCall;
+
+		@Override
+		public boolean hasNext()
+		{
+			return index < size - 1 ? true : false;
+		}
+
+		@Override
+		public Object next()
+		{
+			Object value;
+			if (hasNext())
+			{
+				value = array[index++];
+				hasNextCall = true;
+			}
+			else
+			{
+				throw new NoSuchElementException(MESSAGE_NO_SUCH_ELEMENTS_IN_ITERATOR);
+			}
+
+			return value;
+		}
+
+		@Override
+		public void remove()
+		{
+			if (hasNextCall)
+			{
+				array[index] = null;
+				if (index > 0)
+				{
+					index--;
+				}
+				if (size > 0)
+				{
+					size--;
+				}
+
+				hasNextCall = false;
+			}
+			else
+			{
+				throw new IllegalStateException(MESSAGE_METHOD_NEXT_HAS_NOT_BEEN_COLLEN);
+			}
+
+		}
 	}
 
 	private void checkIndexValid(int index)
