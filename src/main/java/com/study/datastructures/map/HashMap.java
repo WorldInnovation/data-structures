@@ -166,7 +166,7 @@ public class HashMap implements Map
 	private int countHash(Object key)
 	{
 		int hashCode = key.hashCode();
-		return hashCode % (ARRAY_SIZE - 1);//
+		return Math.abs(hashCode % (ARRAY_SIZE - 1));//
 	}
 
 	private Entry getEntry(int bucketKey, Object key)
